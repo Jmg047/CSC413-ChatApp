@@ -1,5 +1,11 @@
 .App {
+  display: flex;
   text-align: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  margin-top: 10%;
 }
 
 .App-logo {
@@ -35,4 +41,60 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.banner{
+  background-color: rgba(97, 218, 251, 0.7);
+  border-radius: 10px;
+}
+
+.inputArea {
+  border: 5px solid black;
+  border-radius: 15px;
+  background-color: transparent;
+  backdrop-filter: blur(2px);
+  box-shadow: 2px 2px 10px black;
+}
+
+.inputBox {
+  background: gray;
+  opacity: 70%;
+  margin: 10px 20px 10px 20px;
+  border-radius: 10px;
+}
+
+.convoArea{
+  margin: 10px 10px 10px 10px;
+  color: white;
+  border: 5px solid black;
+  border-radius: 15px;
+  background-color: transparent;
+  backdrop-filter: blur(2px);
+  box-shadow: 2px 2px 10px black;
+}
+
+.indivConvo{
+  margin: 10px;
+}
+
+.buttonBox{
+  color: white;
+  background-color: transparent;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 1);
+  padding: 10px 20px;
+  margin: 0 5px 10px 5px;
+  transition: all 0.3s ease;
+}
+
+.buttonBox:hover {
+  background-color: rgba(200, 200, 200, 0.2);
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.buttonBox:active {
+  background-color: rgba(200, 200, 200, 0.7);
+  color: white;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 1px 5px rgba(0, 0, 0, 0.5);
 }

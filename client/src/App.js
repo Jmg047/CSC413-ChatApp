@@ -114,27 +114,38 @@ function App() {
 
   if (isLoggedIn) {
     return (
-      <div className="App">
-        <h1>Welcome {userName}</h1>
-        <div>
-          To: <input value={toId} onChange={e => setToId(e.target.value)} />
+        <div className="App" c>
+          <h1 className="banner"><text style={{margin:"20px"}}>Welcome, {userName}!</text></h1>
+          <div className="inputArea">
+            <div className="inputBox" style={{backgroundColor: "transparent"}}>
+              <text style={{color: "white", fontSize: "1.5em"}}>To: </text>
+              <input className="inputBox" value={toId} onChange={e => setToId(e.target.value)} />
+            </div>
+            <textarea className="inputBox" value={message} onChange={e => setMessage(e.target.value)} />
+            <div>
+              <button onClick={handleSendMessage} className="buttonBox">Send Message</button>
+            </div>
+          </div>
+          <div>{errorMessage}</div>
+          <div className="convoArea">{conversations.map(conversation => <div className="indivConvo">Convo: {conversation.conversationId}</div>)}</div>
         </div>
-        <textarea value={message} onChange={e => setMessage(e.target.value)} />
-        <div>
-          <button onClick={handleSendMessage}>Send Message</button>
-        </div>
-        <div>{errorMessage}</div>
-        <div>{conversations.map(conversation => <div>Convo: {conversation.conversationId}</div>)}</div>
-      </div>
     );
   }
 
   return (
     <div className="App">
-      <input value={userName} onChange={e => setUserName(e.target.value)} />
-      <input value={password} onChange={e => setPassword(e.target.value)} type="password" />
-      <button onClick={handleSubmit} disabled={isLoading}>Register</button>
-      <button onClick={handleLogIn} disabled={isLoading}>Log in</button>
+      <div className="inputArea">
+        <label htmlFor="username">Username</label>
+        <div>
+          <input id="username" className="inputBox" value={userName} onChange={e => setUserName(e.target.value)} />
+        </div>
+        <label htmlFor="password">Password</label>
+        <div>
+          <input id="password" className="inputBox" value={password} onChange={e => setPassword(e.target.value)} type="password" />
+        </div>
+        <button onClick={handleSubmit} disabled={isLoading} className="buttonBox">Register</button>
+        <button onClick={handleLogIn} disabled={isLoading} className="buttonBox">Log in</button>
+      </div>
       <div>
         {isLoading ? 'Loading ...' : null}
       </div>

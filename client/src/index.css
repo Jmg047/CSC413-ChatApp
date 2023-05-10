@@ -11,3 +11,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.background{
+  background-image: url("/public/sfstate-sculpture.jpg");
+  background-size: 2304px;
+  background-position: top;
+  background-color: #000;
+  background-repeat: no-repeat;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  height: 50px;
+}
