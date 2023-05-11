@@ -17,6 +17,8 @@ function App() {
 
   // new state variable for list of convos
   const [conversations, setConversations] = React.useState([]); // default empty array
+  //new state variable for a single conversation
+  const [conversation,setConversation] = React.useState([]);
 
   async function getConversations() {
     const httpSettings = {
@@ -112,6 +114,28 @@ function App() {
     setIsLoading(false);
   };
 
+  async function handleGetMostRecentConversation(){
+    const body = {
+      userName: userName,
+    };
+    const httpSettings = {
+      method: 'GET',
+      headers: {
+        auth: cookies.get('auth'), // utility to retrive cookie from cookies
+      },
+      body: JSON.stringify(body),
+    };
+    const result = await fetch('/getMostRecentConversation', httpSettings);
+    const apiRes = await result.json();
+    console.log(apiRes);
+    if (apiRes.status) {
+      // worked
+      setConversation(apiRes.data); // java side should return list of all convos for this user
+    } else {
+      setErrorMessage(apiRes.message);
+    }
+  };
+
   if (isLoggedIn) {
     return (
         <div className="App" c>
@@ -124,10 +148,16 @@ function App() {
             <textarea className="inputBox" value={message} onChange={e => setMessage(e.target.value)} />
             <div>
               <button onClick={handleSendMessage} className="buttonBox">Send Message</button>
+              <button onClick={handleGetMostRecentConversation} className="buttonBox">Resume Most Recent conversation</button>
             </div>
           </div>
           <div>{errorMessage}</div>
-          <div className="convoArea">{conversations.map(conversation => <div className="indivConvo">Convo: {conversation.conversationId}</div>)}</div>
+          <div className="convoArea">{conversations.map(conversation =>
+              <div className="indivConvo">Convo: {conversation.conversationId}</div>)}
+          </div>
+          <div className="convoArea">{conversation.map(conversation =>
+              <div className="indivConvo">message: {conversation.message}</div>)}
+          </div>
         </div>
     );
   }
@@ -135,11 +165,11 @@ function App() {
   return (
     <div className="App">
       <div className="inputArea">
-        <label htmlFor="username">Username</label>
+        <label htmlFor="username" style={{color:"white"}}>Username</label>
         <div>
           <input id="username" className="inputBox" value={userName} onChange={e => setUserName(e.target.value)} />
         </div>
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password" style={{color:"white"}}>Password</label>
         <div>
           <input id="password" className="inputBox" value={password} onChange={e => setPassword(e.target.value)} type="password" />
         </div>
