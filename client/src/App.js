@@ -20,6 +20,11 @@ function App() {
   //new state variable for a single conversation
   const [conversation,setConversation] = React.useState([]);
 
+  async function sendAndSeeMessages(){
+    await handleSendMessage();
+    await handleGetMostRecentConversation();
+  }
+
   async function getConversations() {
     const httpSettings = {
       method: 'GET',
@@ -107,7 +112,7 @@ function App() {
     if (apiRes.status) {
       // worked
       setMessage('');
-      getConversations();
+      await getConversations();
     } else {
       setErrorMessage(apiRes.message);
     }
@@ -115,39 +120,38 @@ function App() {
   };
 
   async function handleGetMostRecentConversation(){
-    const body = {
-      userName: userName,
-    };
+    setIsLoading(true);
     const httpSettings = {
       method: 'GET',
       headers: {
         auth: cookies.get('auth'), // utility to retrive cookie from cookies
       },
-      body: JSON.stringify(body),
     };
     const result = await fetch('/getMostRecentConversation', httpSettings);
+    console.log(result);
     const apiRes = await result.json();
     console.log(apiRes);
     if (apiRes.status) {
       // worked
-      setConversation(apiRes.data); // java side should return list of all convos for this user
+      setConversation(apiRes.data); // java side should return list of most recent convo for this user
     } else {
       setErrorMessage(apiRes.message);
     }
+    setIsLoading(false);
   };
 
   if (isLoggedIn) {
     return (
-        <div className="App" c>
-          <h1 className="banner"><text style={{margin:"20px"}}>Welcome, {userName}!</text></h1>
+        <div className="App">
+          <h1 className="banner">{<text style={{margin:"20px"}}>Welcome, {userName}!</text>}</h1>
           <div className="inputArea">
             <div className="inputBox" style={{backgroundColor: "transparent"}}>
-              <text style={{color: "white", fontSize: "1.5em"}}>To: </text>
+              {<text style={{color: "white", fontSize: "1.5em"}}>To: </text>}
               <input className="inputBox" value={toId} onChange={e => setToId(e.target.value)} />
             </div>
             <textarea className="inputBox" value={message} onChange={e => setMessage(e.target.value)} />
             <div>
-              <button onClick={handleSendMessage} className="buttonBox">Send Message</button>
+              <button onClick={sendAndSeeMessages} className="buttonBox">Send Message</button>
               <button onClick={handleGetMostRecentConversation} className="buttonBox">Resume Most Recent conversation</button>
             </div>
           </div>
@@ -156,7 +160,11 @@ function App() {
               <div className="indivConvo">Convo: {conversation.conversationId}</div>)}
           </div>
           <div className="convoArea">{conversation.map(conversation =>
-              <div className="indivConvo">message: {conversation.message}</div>)}
+                  <div>{(conversation.fromId === userName) ?
+                      (<div className="indivConvoFrom">{conversation.message}</div>):
+                      (<div className="indivConvoFrom">{conversation.fromId}: {conversation.message}</div>)}
+                  </div>)}
+
           </div>
         </div>
     );
