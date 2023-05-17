@@ -18,7 +18,9 @@ public class HandlerFactory {
         return new CreateMessageHandler();
       case "/getMostRecentConversation": //endpoint created by Elliot Warren
         return new GetMostRecentConversationHandler();
-      default:
+      case "/deleteEverything":
+        return new DeleteEverything(); //Conrad Choi made this.
+        default:
         return new FallbackHandler();
     }
   }
