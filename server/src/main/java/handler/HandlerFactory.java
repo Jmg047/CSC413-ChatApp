@@ -20,9 +20,10 @@ public class HandlerFactory {
         return new GetMostRecentConversationHandler();
       case "/createFavList": //endpoint created by Akram Al Raeeini
         return new CreateFavListHandler();
-
-      default:
-        return new FallbackHandler();
+      case "/deleteEverything":
+        return new DeleteEverything(); //Conrad Choi made this.
+     default:
+         return new FallbackHandler();
     }
   }
 

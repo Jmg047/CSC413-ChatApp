@@ -46,7 +46,7 @@ public class FavDao extends BaseDao<FavDto>{
                 .collect(Collectors.toList());
     }
 
-
+    // query by userName and favId to make sure the same user can't add the same fav twice
     public List<FavDto> queryByUserNameAndFavId(String userName, String favId){
         return query(new Document("userName", userName).append("favId", favId));
     }
