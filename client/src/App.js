@@ -1,6 +1,7 @@
 import './App.css';
 import React from 'react';
 import Cookies from 'universal-cookie';
+import SearchBar from './component/searchbar.js';
 
 const cookies = new Cookies();
 
@@ -143,6 +144,9 @@ function App() {
   if (isLoggedIn) {
     return (
         <div className="App">
+          <div className="bar">
+            <SearchBar/>
+          </div>
           <h1 className="banner">{<text style={{margin:"20px"}}>Welcome, {userName}!</text>}</h1>
           <div className="inputArea">
             <div className="inputBox" style={{backgroundColor: "transparent"}}>
@@ -159,14 +163,16 @@ function App() {
           <div className="convoArea">{conversations.map(conversation =>
               <div className="indivConvo">Convo: {conversation.conversationId}</div>)}
           </div>
+          <div className="content">
           <div className="convoArea">{conversation.map(conversation =>
                   <div>{(conversation.fromId === userName) ?
-                      (<div className="indivConvoFrom">{conversation.message}</div>):
-                      (<div className="indivConvoFrom">{conversation.fromId}: {conversation.message}</div>)}
+                      (<div className="indivConvoFrom">{conversation.fromId}:  {conversation.message}</div>):
+                      (<div className="indivConvoFrom">{conversation.fromId}:  {conversation.message}</div>)}
                   </div>)}
 
           </div>
         </div>
+     </div>
     );
   }
 
