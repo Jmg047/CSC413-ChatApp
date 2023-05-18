@@ -1,6 +1,7 @@
 package dao;
 
 import com.mongodb.client.MongoCollection;
+import dto.FavDto;
 import dto.UserDto;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,8 @@ public class UserDao extends BaseDao<UserDto> {
     collection.insertOne(messageDto.toDocument());
   }
 
+
+
   public List<UserDto> query(Document filter){
     return collection.find(filter)
         .into(new ArrayList<>())
@@ -40,5 +43,7 @@ public class UserDao extends BaseDao<UserDto> {
         .map(UserDto::fromDocument)
         .collect(Collectors.toList());
   }
+
+
 
 }

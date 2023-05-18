@@ -2,14 +2,22 @@ import './App.css';
 import React from 'react';
 import Cookies from 'universal-cookie';
 
+
 const cookies = new Cookies();
 
 function App() {
   const [userName, setUserName] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [favId, setFavUser] = React.useState(''); // new state variable for favorite user
+  const [clickedFav,setFav] = React.useState(false); 
   const [isLoading, setIsLoading] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
+
+
+  const [favoriteUsers, setFavoriteUsers] = React.useState('');
+
+
 
   // new state variables for chat box
   const [toId, setToId] = React.useState('');
@@ -91,6 +99,32 @@ function App() {
     setIsLoading(false);
   };
 
+
+
+  async function handleGetMostRecentConversation(){
+    setIsLoading(true);
+    const httpSettings = {
+      method: 'GET',
+      headers: {
+        auth: cookies.get('auth'), // utility to retrive cookie from cookies
+      },
+    };
+    const result = await fetch('/getMostRecentConversation', httpSettings);
+    console.log(result);
+    const apiRes = await result.json();
+    console.log(apiRes);
+    if (apiRes.status) {
+      // worked
+      setConversation(apiRes.data); // java side should return list of most recent convo for this user
+    } else {
+      setErrorMessage(apiRes.message);
+    }
+    setIsLoading(false);
+  };
+
+
+
+
   async function handleSendMessage() {
     setIsLoading(true);
     setErrorMessage(''); // fresh error message each time
@@ -119,26 +153,34 @@ function App() {
     setIsLoading(false);
   };
 
-  async function handleGetMostRecentConversation(){
+  async function  addFavoriteUser() {
+    setFavUser(''); // Clear the input field
     setIsLoading(true);
+    setErrorMessage('');
+    const body = {
+      userName: userName,
+      favId: favId,
+    };
     const httpSettings = {
-      method: 'GET',
+      body: JSON.stringify(body),
+      method: 'POST',
       headers: {
         auth: cookies.get('auth'), // utility to retrive cookie from cookies
-      },
+      }
     };
-    const result = await fetch('/getMostRecentConversation', httpSettings);
-    console.log(result);
+    const result = await fetch('/createFavList', httpSettings);
     const apiRes = await result.json();
     console.log(apiRes);
     if (apiRes.status) {
       // worked
-      setConversation(apiRes.data); // java side should return list of most recent convo for this user
+      setMessage('');
+      await getConversations();
     } else {
       setErrorMessage(apiRes.message);
     }
     setIsLoading(false);
   };
+
 
   if (isLoggedIn) {
     return (
@@ -153,9 +195,24 @@ function App() {
             <div>
               <button onClick={sendAndSeeMessages} className="buttonBox">Send Message</button>
               <button onClick={handleGetMostRecentConversation} className="buttonBox">Resume Most Recent conversation</button>
+
+              <div className="inputArea">
+              <input
+                style={{backgroundColor:"white"}}
+                className="inputBox"
+                value={favId}
+                onChange={e => setFavUser(e.target.value)}
+                placeholder="Enter username"
+              />
+              <button onClick={addFavoriteUser} className="buttonBox">
+                Add Favorite User
+              </button>
+              </div>
+
             </div>
           </div>
-          <div>{errorMessage}</div>
+         <div style={{ color: 'red' }}>{errorMessage}</div>
+
           <div className="convoArea">{conversations.map(conversation =>
               <div className="indivConvo">Convo: {conversation.conversationId}</div>)}
           </div>
@@ -187,7 +244,7 @@ function App() {
       <div>
         {isLoading ? 'Loading ...' : null}
       </div>
-      <div>{errorMessage}</div>
+      <div style={{ color: 'red' }}>{errorMessage}</div>
     </div>
   );
 }

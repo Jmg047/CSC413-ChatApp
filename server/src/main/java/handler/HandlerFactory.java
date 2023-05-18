@@ -18,6 +18,9 @@ public class HandlerFactory {
         return new CreateMessageHandler();
       case "/getMostRecentConversation": //endpoint created by Elliot Warren
         return new GetMostRecentConversationHandler();
+      case "/createFavList": //endpoint created by Akram Al Raeeini
+        return new CreateFavListHandler();
+
       default:
         return new FallbackHandler();
     }
