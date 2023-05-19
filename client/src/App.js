@@ -182,12 +182,38 @@ function App() {
     setIsLoading(false);
   };
 
+  async function search(searchTerm) { 
+    setIsLoading(true);
+
+    const httpSettings = {
+      method: 'GET',
+      headers: {
+        auth: cookies.get('auth'),
+      },
+    };
+
+    const result = await fetch(`/SearchBar?search=${encodeURIComponent(searchTerm)}`, httpSettings);
+    console.log(result);
+
+    const apiRes = await result.json();
+    console.log(apiRes);
+
+    if (apiRes.status) {
+      setConversation(apiRes.data);
+    } else {
+      setErrorMessage(apiRes.message);
+    }
+
+    setIsLoading(false);
+  }
+
 
   if (isLoggedIn) {
     return (
         <div className="App">
           <div className="bar">
             <SearchBar/>
+            <button onClick={search} className="submit" type="submit">Search</button>
           </div>
           <h1 className="banner">{<text style={{margin:"20px"}}>Welcome, {userName}!</text>}</h1>
           <div className="inputArea">
