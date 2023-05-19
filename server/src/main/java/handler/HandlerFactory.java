@@ -22,6 +22,8 @@ public class HandlerFactory {
         return new CreateFavListHandler();
       case "/deleteEverything":
         return new DeleteEverything(); //Conrad Choi made this.
+      case "/searchBar":
+        return new SearchBarHandler(); // Endpoint made by Jaime G.
      default:
          return new FallbackHandler();
     }
