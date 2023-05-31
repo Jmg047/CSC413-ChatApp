@@ -7,7 +7,6 @@ import org.bson.Document;
 import request.ParsedRequest;
 import response.HttpResponseBuilder;
 import response.RestApiAppResponse;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 public class SearchBarHandler implements BaseHandler {
@@ -20,13 +19,13 @@ public class SearchBarHandler implements BaseHandler {
         List<MessageDto> messageDtoList = MessageDao.getInstance().query(messageFilter);
 
         // Search for messages that match the input
-        String searchInput = request.getQueryParam("searchTerm");
+        /*String searchInput = request.getQueryParam("searchTerm");
         List<MessageDto> searchResults = new ArrayList<>();
         for (MessageDto messageDto : messageDtoList) {
             if (messageDto.getMessage().contains(searchInput)) {
                 searchResults.add(messageDto);
             }
-        }
+        }*/
 
         var res = new RestApiAppResponse<>(true, searchResults, null);
         return new HttpResponseBuilder().setStatus("200 OK").setBody(res);

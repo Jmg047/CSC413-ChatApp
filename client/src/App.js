@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useState } from 'react';
 import Cookies from 'universal-cookie';
 import SearchBar from './component/searchbar.js';
 
@@ -182,38 +182,37 @@ function App() {
     setIsLoading(false);
   };
 
-  async function search(searchTerm) { 
+  const search = async (searchTerm) => {
     setIsLoading(true);
-
+  
     const httpSettings = {
       method: 'GET',
       headers: {
         auth: cookies.get('auth'),
       },
     };
-
-    const result = await fetch(`/SearchBar?search=${encodeURIComponent(searchTerm)}`, httpSettings);
+  
+    const result = await fetch('/searchBar}', httpSettings);
     console.log(result);
-
+  
     const apiRes = await result.json();
     console.log(apiRes);
 
-    if (apiRes.status) {
+    if (apiRes && apiRes.status) {
       setConversation(apiRes.data);
     } else {
-      setErrorMessage(apiRes.message);
+      setErrorMessage(apiRes?.message || 'Error occurred');
     }
-
+  
     setIsLoading(false);
-  }
+  };
 
 
   if (isLoggedIn) {
     return (
         <div className="App">
           <div className="bar">
-            <SearchBar/>
-            <button onClick={search} className="submit" type="submit">Search</button>
+            <SearchBar onSearch={search}/>
           </div>
           <h1 className="banner">{<text style={{margin:"20px"}}>Welcome, {userName}!</text>}</h1>
           <div className="inputArea">
